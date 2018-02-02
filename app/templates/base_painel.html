@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load filters %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Focus Delivery | Dashboard</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href='{% static 'bootstrap/css/bootstrap.min.css' %}'>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    {#    <!-- Ionicons -->#}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href='{% static 'dist/css/AdminLTE.css' %}'>
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+    folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href='{% static 'dist/css/skins/_all-skins.min.css' %}'>
+    <!-- iCheck -->
+    <link rel="stylesheet" href='{% static 'plugins/iCheck/flat/blue.css' %}'>
+    <!-- Date Picker -->
+    <link rel="stylesheet" href='{% static 'plugins/datepicker/datepicker3.css' %}'>
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href='{% static 'plugins/daterangepicker/daterangepicker-bs3.css' %}'>
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link rel="stylesheet" href='{% static 'plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css' %}'>
+
+    <link rel="stylesheet" href="{% static 'css/sweetalert.min.css' %}">
+
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'css/datatables.min.css' %}"/>
+    {#        <link rel="stylesheet" type="text/css"#}
+    {#              href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.10.3/css/bootstrap-tour.min.css"/>#}
+    <style>
+        #ajuda {
+            cursor: pointer;
+        }
+
+        /* Smartphones ----------- */
+        @media only screen and (max-width: 760px) {
+            #logo_1 {
+                display: none;
+            }
+
+            #logo_2 {
+                display: block;
+            }
+
+            #back_logo {
+                background-color: #000;
+            }
+
+        }
+
+        @media only screen and (min-width: 761px) {
+            #logo_1 {
+                display: block;
+            }
+
+            #logo_2 {
+                display: none;
+            }
+        }
+    </style>
+
+
+</head>
+<body id="body" class="hold-transition skin-black">
+<!-- jQuery 2.2.0 -->
+<script
+        src="{% static 'plugins/jQuery/jQuery-2.2.0.min.js' %}"></script>
+<div class="wrapper">
+
+    <header class="main-header">
+        <!-- Logo -->
+        <a href="#" id="back_logo" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <!--<span>Focus Delivery</span>-->
+            <span id="logo_1"><img src='{% static 'img/logo_png.png' %}' class="" style="max-height: 25px; "
+                                   alt="logo"/> <b>Focus </b>Delivery</span>
+
+            <span id="logo_2"><img src='{% static 'img/log_black.png' %}' class="" style="max-height: 60px;"
+                                   alt="logo"/> <b>Focus </b>Delivery</span>
+
+            <!-- logo for regular state and mobile devices -->
+            <!--<span class="logo-lg"><b>Focus </b>Delivery</span>-->
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    {% if user.estabelecimento %}
+                        <li class="dropdown messages-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="label label-success">{{ messages_e|length }}</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header">Você tem {{ messages_e|length }} mensagens</li>
+                                <li>
+                                    <!-- inner menu: contains the actual data -->
+                                    <ul class="menu">
+                                        {% for message in messages_e %}
+                                            <li><!-- start message -->
+                                                <a href="{% url 'chat_view' message.pedido.pk %}">
+                                                    <div class="pull-left">
+                                                        {% if message.u_from.motorista.photo %}
+                                                            <img src="{{ message.u_from.motorista.photo }}"
+                                                                 class="img-circle"
+                                                                 alt="User Image">
+                                                        {% else %}
+                                                            <img src="{% static 'img/300.png' %}" class="img-circle"
+                                                                 alt="User Image">
+                                                        {% endif %}
+                                                    </div>
+                                                    <h4>
+                                                        <small><i
+                                                                class="fa fa-clock-o"></i> {{ message.created_at|date:"G:i" }}
+                                                        </small>
+                                                    </h4>
+                                                    <p>{{ message.text }}</p>
+                                                </a>
+                                            </li>
+                                            <!-- end message -->
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="footer"><a href="{% url 'list_all_chats' %}">Veja todas as
+                                    mensagens</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown notifications-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-bell-o"></i>
+                                <span class="label label-warning">{{ pedidos_n|length }}</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header">Voce tem {{ pedidos_n|length }} Pedidos para entregar</li>
+                                <li>
+                                    <!-- inner menu: contains the actual data -->
+                                    <ul class="menu">
+                                        {% for ped in pedidos_n %}
+                                            <li>
+                                                <a href="{% url 'acompanhar_pedido_view' ped.pk %}">
+                                                    <i class="fa fa-warning text-yellow"></i>
+                                                    Pedido #{{ ped.pk }} está em andamento.
+                                                </a>
+                                            </li>
+                                        {% empty %}
+                                            <li>
+                                                <a href="#">
+                                                    Nenhum pedido em andamento
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+
+                                    </ul>
+                                </li>
+                                <li class="footer"><a href="{% url 'acompanhar_list' %}">Acompanhar Pedidos</a></li>
+                            </ul>
+                        </li>
+                    {% elif user.motorista %}
+                        {% if user.motorista.ocupado %}
+                            <li class="dropdown messages-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-envelope-o"></i>
+                                    <span class="label label-success">{{ messages_m|length }}</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="header">Voce tem {{ messages_m|length }} mensagens</li>
+                                    <li>
+                                        <!-- inner menu: contains the actual data -->
+                                        <ul class="menu">
+                                            {% for message in messages_m %}
+                                                <li><!-- start message -->
+                                                    <a href="{% url 'chat_motorista_view' %}">
+                                                        <div class="pull-left">
+                                                            {% if message.u_from.estabelecimento.photo %}
+                                                                <img src="{{ message.u_from.estabelecimento.photo }}"
+                                                                     class="img-circle"
+                                                                     alt="User Image">
+                                                            {% else %}
+                                                                <img src="{% static 'img/300.png' %}" class="img-circle"
+                                                                     alt="User Image">
+                                                            {% endif %}
+                                                        </div>
+                                                        <h4>
+                                                            <small><i
+                                                                    class="fa fa-clock-o"></i> {{ message.created_at|date:"G:i" }}
+                                                            </small>
+                                                        </h4>
+                                                        <p>{{ message.text }}</p>
+                                                    </a>
+                                                </li>
+                                                <!-- end message -->
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                    <li class="footer"><a href="{% url 'chat_motorista_view' %}">Veja todas as
+                                        mensagens</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                    <li class="dropdown tasks-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-flag-o"></i>
+                            <span class="label label-danger">{{ notifications_n|length }}</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">Você tem {{ notifications_n|length }} notificações</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    {% for n in notifications_n %}
+                                        <li><!-- Task item -->
+                                            <a href="#">
+                                                <h3>
+                                                    {{ n.message|truncatechars:'37' }}
+                                                    <small class="pull-right">
+                                                        {% if n.type_message == 'NOVO_PEDIDO' %}
+                                                            <label class="label label-info"><i
+                                                                    class=""></i>
+                                                                NOVO PEDIDO</label>
+                                                        {% elif n.type_message == 'DELETE_LOJA' %}
+                                                            <label class="label label-warning"><i
+                                                                    class=""></i>
+                                                                CANCELAMENTO</label>
+
+                                                        {% elif n.type_message == 'CANCEL_ORDER' %}
+                                                            <label class="label label-warning"><i
+                                                                    class=""></i>
+                                                                CANCELAMENTO</label>
+
+                                                        {% elif n.type_message == 'ORDER_DELIVERED' %}
+                                                            <label class="label label-info"><i
+                                                                    class=""></i>
+                                                                ENTREGA</label>
+
+                                                        {% elif n.type_message == 'ACCEPT_ORDER' %}
+                                                            <label class="label label-default"><i
+                                                                    class=""></i>
+                                                                PEDIDO ACEITO</label>
+
+                                                        {% elif n.type_message == 'ENABLE_ROTA' %}
+                                                            <label class="label label-info"><i
+                                                                    class=""></i>
+                                                                ROTA</label>
+                                                        {% elif n.type_message == 'ALL_DELIVERED' %}
+                                                            <label class="label label-success"><i
+                                                                    class=""></i>
+                                                                PEDIDO ENTREGUE</label>
+                                                        {% endif %}
+                                                    </small>
+                                                </h3>
+                                            </a>
+                                        </li>
+                                    {% empty %}
+                                        <li><!-- Task item -->
+                                            <a href="#">
+                                                <h3>
+                                                    Nenhuma notificação nova
+                                                </h3>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <li class="footer">
+                                <a href="{% url 'notificacoes' %}">Ver Notificações</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            {% if user.motorista %}
+                                {% if user.motorista.photo %}
+                                    <img src="{{ user.motorista.photo }}" class="user-image" alt="User Image">
+                                {% else %}
+                                    <img src="{% static 'img/300x300.png' %}" class="user-image" alt="User Image">
+                                {% endif %}
+                            {% elif user.estabelecimento %}
+                                {% if user.estabelecimento.photo %}
+                                    <img src="{{ user.estabelecimento.photo }}" class="user-image" alt="User Image">
+                                {% else %}
+                                    <img src="{% static 'img/300x300.png' %}" class="user-image" alt="User Image">
+                                {% endif %}
+                            {% endif %}
+                            <span class="hidden-xs">{{ user.first_name }}</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <li class="user-header">
+                                {% if user.motorista %}
+                                    {% if user.motorista.photo %}
+                                        <img src="{{ user.motorista.photo }}" class="user-image" alt="User Image">
+                                    {% else %}
+                                        <img src="{% static 'img/300x300.png' %}" class="user-image" alt="User Image">
+                                    {% endif %}
+                                {% elif user.estabelecimento %}
+                                    {% if user.estabelecimento.photo %}
+                                        <img src="{{ user.estabelecimento.photo }}" class="user-image" alt="User Image">
+                                    {% else %}
+                                        <img src="{% static 'img/300x300.png' %}" class="user-image" alt="User Image">
+                                    {% endif %}
+                                {% endif %}
+
+
+                                <p>
+                                    <small>Username: {{ user.username }}</small>
+                                </p>
+                            </li>
+                            <!-- Menu Body -->
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                </div>
+                                <div class="pull-right">
+                                    <a href="{% url "auth_logout" %}" class="btn btn-default btn-flat">Sair</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Control Sidebar Toggle Button -->
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    {% if user.motorista %}
+                        {% if user.motorista.photo %}
+                            <img src="{{ user.motorista.photo }}" class="img-circle" alt="User Image" style="margin-bottom: 15px;">
+                        {% else %}
+                            <img src="{% static 'img/300x300.png' %}" class="img-circle" alt="User Image">
+                        {% endif %}
+                    {% elif user.estabelecimento %}
+                        {% if user.estabelecimento.photo %}
+                            <img src="{{ user.estabelecimento.photo }}" class="img-circle" alt="User Image" style="margin-bottom: 15px;">
+                        {% else %}
+                            <img src="{% static 'img/300x300.png' %}" class="img-circle" alt="User Image">
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="pull-left info">
+                    <p>Olá, {{ user.first_name }}</p>
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                </div>
+            </div>
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+                <li class="header">MENU</li>
+                {% if user.motorista %}
+                    <li id="pedidos">
+                        <a href="{% url 'pedidos_motorista' %}">
+                            <i class="fa fa-list-alt"></i> <span>Pedidos</span>
+                        </a>
+                    </li>
+                    <li id="entregas">
+                        <a href="{% url 'entregas_motorista' %}">
+                            <i class="fa fa-motorcycle"></i> <span>Entregas</span>
+                        </a>
+                    </li>
+                    <li id="lojas_credenciadas">
+                        <a href="{% url 'lojas_credenciadas' %}">
+                            <i class="fa fa-suitcase"></i> <span>Lojas Credenciadas</span>
+                        </a>
+                    </li>
+                    {% if user.motorista.ocupado %}
+                        <li id="chat">
+                            <a href="{% url 'chat_motorista_view' %}">
+                                <i class="fa fa-comments-o"></i> <span>Chat</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    <li id="pedidos">
+                        <a href="{% url 'pedidos_estabelecimento' %}">
+                            <i class="fa fa-dashboard"></i> <span>Pedidos</span>
+                        </a>
+                    </li>
+                    <li id="acompanhar">
+                        <a href="{% url 'acompanhar_list' %}">
+                            <i class="fa fa-location-arrow"></i> <span>Acompanhar</span>
+                        </a>
+                    </li>
+                    <li id="relatorios">
+                        <a href="{% url 'relatorios' %}">
+                            <i class="fa fa-bar-chart"></i> <span>Relatorios</span>
+                        </a>
+                    </li>
+                    <!--<li id="motoristas_ativos">-->
+                    <!--    <a href="{% url 'motoristas_ativos_view' %}">-->
+                    <!--        <i class="fa fa-dashboard"></i> <span>Motoristas em Entrega</span>-->
+                    <!--    </a>-->
+                    <!--</li>-->
+                    <li id="chat">
+                        <a href="{% url 'list_all_chats' %}">
+                            <i class="fa fa-comments-o"></i> <span>Chat</span>
+                        </a>
+                    </li>
+                    <li id="editar_perfil">
+                        <a href="{% url 'edit_perfil_view' %}">
+                            <i class="fa fa-user"></i> <span>Editar Perfil</span>
+                        </a>
+                    </li>
+                {% endif %}
+                <li id="notificacoes">
+                    <a href="{% url "notificacoes" %}">
+                        <i class="fa fa-warning"></i> <span>Notificações</span>
+                    </a>
+                </li>
+                <li id="logout">
+                    <a href="{% url "auth_logout" %}">
+                        <i class="fa fa-sign-out"></i> <span>Sair</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+    <audio id="alert" src="{% static 'alert.wav' %}" controls="false" preload="auto" autobuffer
+           style="display: none;"></audio>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- Small boxes (Stat box) -->
+            {% block content %}
+                {% include 'loading.html' %}
+
+            {% endblock %}
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b>&copy; Delivery</b>
+        </div>
+    </footer>
+</div>
+
+
+<!-- ./wrapper -->
+
+<!-- jQuery UI 1.11.4 -->
+<script src="{% static 'plugins/jQueryUI/jquery-ui.min.js' %}"></script>
+
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge('uibutton', $.ui.button);
+</script>
+
+
+<!-- Bootstrap 3.3.5 -->
+<script src='{% static 'bootstrap/js/bootstrap.min.js' %}'></script>
+<!-- jQuery Knob Chart -->
+<script src='{% static 'plugins/knob/jquery.knob.js' %}'></script>
+<!-- datepicker -->
+<script src='{% static 'plugins/datepicker/bootstrap-datepicker.js' %}'></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src='{% static 'plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js' %}'></script>
+<!-- Slimscroll -->
+<script src='{% static 'plugins/slimScroll/jquery.slimscroll.min.js' %}'></script>
+<!-- FastClick -->
+<script src='{% static 'plugins/fastclick/fastclick.min.js' %}'></script>
+
+<script src='{% static 'plugins/chartjs/Chart.js' %}'></script>
+
+<script src="{% static 'js/jquery.inputmask.bundle.js' %}"></script>
+<!-- AdminLTE App -->
+<script src='{% static 'dist/js/app.min.js' %}'></script>
+
+
+<script type="text/javascript" src="{% static 'js/sweetalert.min.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'js/moment-with-locales.min.js' %}"></script>
+
+<script src="{% static "dist/js/chartReport.js" %}"></script>
+
+<div id="notify"></div>
+
+
+<script>
+    function play(soundobj) {
+        var thissound = document.getElementById(soundobj);
+        thissound.play();
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $('.datepicker').datepicker({
+            clearBtn: true,
+            format: 'yyyy-mm-dd',
+            todayHighlight: true,
+            autoclose: true
+        });
+
+        $('[name=cep]').focusout(function () {
+            $('#loading').show();
+            var cep = $('[name=cep]');
+            var cepCode = cep.val();
+            if (cepCode.length <= 0) return;
+            $.ajax({
+                type: 'GET',
+                url: 'http://apps.widenet.com.br/busca-cep/api/cep.json',
+                data: {code: cepCode},
+                success: function (result) {
+                    $('#loading').hide();
+                    if (result.status == 0) {
+                        alert(result.message || "Houve um erro desconhecido");
+                        return;
+                    } else {
+                        $('[name=cep]').val(result.code);
+                        var index = result.address.search('-');
+                        if (index != -1) {
+                            address = result.address.substring(0, index);
+                        } else {
+                            address = result.address;
+                        }
+                        $('[name=endereco]').val(address);
+                        $('[name=bairro]').val(result.district);
+                    }
+                }
+            });
+        });
+
+        $('[name=phone]').inputmask('(99) 9999[9]-9999');
+        $('[name=cep]').inputmask('99.999-999');
+        $('[name=cpf]').inputmask('999.999.999-99');
+        $('[name=cnpj]').inputmask('99.999.999/9999-99');
+
+
+        {% if user.motorista %}
+
+            window.setInterval(function () {
+                $.ajax({
+                    url: "{% url 'notify_enable_rota_motorista' %}",
+                    type: "GET", // http method
+                    success: function (data) {
+                        $('#notify').html(data);
+                    },
+                    complete: function () {
+                        $('#loading').hide();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }, 4000);
+
+            window.setInterval(function () {
+                $.ajax({
+                    url: "{% url 'notify_delete_loja_motorista' %}",
+                    type: "GET", // http method
+                    success: function (data) {
+                        $('#notify').html(data);
+                    },
+                    complete: function () {
+                        $('#loading').hide();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }, 4000);
+
+            window.setInterval(function () {
+                $.ajax({
+                    url: "{% url 'notify_novo_pedido_motorista' %}",
+                    type: "GET", // http method
+                    success: function (data) {
+                        $('#notify').html(data);
+                    },
+                    complete: function () {
+                        $('#loading').hide();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }, 4000);
+
+            window.setInterval(function () {
+                $.ajax({
+                    url: "{% url 'notify_admin_message' %}",
+                    type: "GET", // http method
+                    success: function (data) {
+                        $('#notify').html(data);
+                    },
+                    complete: function () {
+                        $('#loading').hide();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }, 4000);
+
+
+        {% else %}
+
+            window.setInterval(function () {
+                $.ajax({
+                    url: "{% url 'notify_accept_order_loja' %}",
+                    type: "GET", // http method
+                    success: function (data) {
+                        $('#notify').html(data);
+                    },
+                    complete: function () {
+                        $('#loading').hide();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }, 4000);
+
+            window.setInterval(function () {
+                $.ajax({
+                    url: "{% url 'notificar_order_delivered_loja' %}",
+                    type: "GET", // http method
+                    success: function (data) {
+                        $('#notify').html(data);
+                    },
+                    complete: function () {
+                        $('#loading').hide();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }, 4000);
+
+
+
+            window.setInterval(function () {
+                $.ajax({
+                    url: "{% url 'notificar_all_delivered_loja' %}",
+                    type: "GET", // http method
+                    success: function (data) {
+                        $('#notify').html(data);
+                    },
+                    complete: function () {
+                        $('#loading').hide();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }, 4000);
+
+
+        {% endif %}
+
+        window.setInterval(function () {
+            $.ajax({
+                url: "{% url 'notify_admin_message' %}",
+                type: "GET", // http method
+                success: function (data) {
+                    $('#notify').html(data);
+                },
+                complete: function () {
+                    $('#loading').hide();
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }, 4000);
+
+
+    });
+
+
+</script>
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'error' %}
+            <script>
+                $(document).ready(function () {
+                    play('alert');
+                    swal("Erro", "{{ message }}", "error")
+                });
+            </script>
+        {% else %}
+            <script>
+                $(document).ready(function () {
+                    play('alert');
+                    swal("Sucesso", "{{ message }}", "success")
+                });
+            </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+
+</body>
+</html>

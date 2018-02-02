@@ -1,0 +1,126 @@
+{% load staticfiles %}
+<style>
+    @media (min-width: 650px) {
+        .logtype {
+            max-width: 300px;
+            max-height: 55px;
+        }
+    }
+
+    @media (max-width: 649px) {
+        .logtype {
+            max-width: 239px;
+            max-height: 55px;
+        }
+    }
+
+</style>
+<header>
+    <div id="top">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-5 contact">
+                    <p class="hidden-sm hidden-xs">Contate-nos em +55 (83) 3337-3757 ou ciadocimento@gmail.com.</p>
+
+                    <p class="hidden-md hidden-lg"><a href="#" data-animate-hover="pulse"><i
+                            class="fa fa-phone"></i></a> <a href="#" data-animate-hover="pulse"><i
+                            class="fa fa-envelope"></i></a>
+                    </p>
+                </div>
+                <div class="col-xs-7">
+                    <div class="social">
+                        <a href="#" class="external facebook" data-animate-hover="pulse"><i
+                                class="fa fa-facebook"></i></a>
+                        <a href="#" class="external gplus" data-animate-hover="pulse"><i
+                                class="fa fa-google-plus"></i></a>
+                        <a href="#" class="external twitter" data-animate-hover="pulse"><i
+                                class="fa fa-twitter"></i></a>
+                        <a href="#" class="email" data-animate-hover="pulse"><i class="fa fa-envelope"></i></a>
+                    </div>
+
+                    <div class="login">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'notificacoes' %}"> Olá, {{ user.first_name }} &nbsp;&nbsp;&nbsp; </a>
+                        {% else %}
+                            <a href="{% url 'login' %}"><i class="fa fa-sign-in"></i>
+                                <span class="hidden-xs text-uppercase">Log in</span></a>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- *** TOP END *** -->
+
+    <!-- *** NAVBAR ***
+_________________________________________________________ -->
+
+    <div class="navbar-affixed-top" data-spy="affix" data-offset-top="200">
+
+        <div class="navbar navbar-default yamm" role="navigation" id="navbar">
+
+            <div class="container">
+                <div class="navbar-header">
+
+                    <a class="navbar-brand home" href="/">
+                        <span id="logo_1"><img src='{% static 'img/title-cia.png' %}' class="logtype"
+                                               alt="logo"/>
+                        </span>
+                        {#                        <h1 style="margin-top: 2px;"> CIA DO CIMENTO</h1>#}
+                    </a>
+
+                    <div class="navbar-buttons">
+                        <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse"
+                                data-target="#navigation">
+                            <span class="sr-only">Toggle navigation</span>
+                            <i class="fa fa-align-justify"></i>
+                        </button>
+                    </div>
+                </div>
+                <!--/.navbar-header -->
+
+                <div class="navbar-collapse collapse" id="navigation">
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li id="home" class="">
+                            <a href="{% url 'home' %}">Home</a>
+                        </li>
+                        <li id="about" class="">
+                            <a href="{% url 'home' %}#sobre">Sobre</a>
+                        </li>
+                        <li id="loja" class="">
+                            <a href="{% url 'catalogo' %}">Loja</a>
+                        </li>
+                        <li id="contact" class="">
+                            <a href="{% url 'home' %}#contato">Contato</a>
+                        </li>
+                        <li id="" class="">
+                            {% if pedido.pk %}
+                                <a href="{% url 'carrinho' pedido.pk %}"
+                                   class="fa fa-shopping-cart"> {{ pedido.item_set.all|length }} - Itens </a>
+                            {% endif %}
+                        </li>
+                        <li id="select" class="">
+                            <a href="#">
+                                <select name="" class="form-control form-control-lg"
+                                        onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+                                    <option value="http://guarabira.ciadocimento.com.br">Guarabira</option>
+                                    <option value="http://ciadocimento.com.br">Campina Grande</option>
+                                </select>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+                <!--/.nav-collapse -->
+
+            </div>
+
+        </div>
+        <!-- /#navbar -->
+    </div>
+    <!-- *** NAVBAR END *** -->
+</header>

@@ -1,0 +1,209 @@
+{% extends 'site/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <style>
+        .jumbotron {
+            padding-bottom: 0px;
+        }
+
+    </style>
+    {#    {% include 'carrossel.html' %}#}
+    <section class="no-mb">
+
+        <div class="jumbotron">
+
+            <div class="dark-mask"></div>
+
+            <div class="container">
+                <div class="row mb-small">
+                    <div class="col-sm-12 text-center">
+                        <h2>Toda tranquilidade quando se tem Cia do Cimento em sua obra.</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 ">
+                        <img class="img-responsive" src="{% static 'img/obra.png' %}" alt="">
+                    </div>
+
+                    <div class="col-sm-6 text-center-xs">
+                        <p class="text-uppercase">Possuímos a mais inteligente Logística <br/>
+                            para sua comodidade.
+                        </p>
+                        <p>Acesse agora nosso catálogo de produtos<br/> e faça seu pedido.
+                            <br/></p>
+                        <p>
+                            <a href="{% url 'catalogo' %}" class="scroll-to btn btn-template-transparent-black">Acessar
+                                Catálogo</a>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- *** JUMBOTRON END *** -->
+    </section>
+
+    <section class="bar background-gray no-mb padding-big text-center-sm" id="sobre">
+        <div class="container" style="">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2 class="text-uppercase" style="color: #0c0c0c">Sobre Nós</h2>
+                    <p class="lead mb-small">Somos a Cia do Cimento. </p>
+                    <p class="lead mb-small">Uma empresa multi marcas de distribuição
+                        segmentada a construção civil. <br/>
+                        Temos nossa parceria com marcas consolidadas ao mercado, e estamos dispostos a lhe atender bem
+                        oferecendo o melhor entre os materiais de construção.
+                    </p>
+
+                </div>
+                <div class="col-md-6 text-center">
+                    <img src="{% static 'img/log-cia.png' %}" alt="" class="img-responsive">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bar no-mb color-white padding-big text-center-sm">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center">
+                    <img src="{% static 'img/template-easy-code.png' %}" alt="" class="img-responsive">
+                </div>
+                <div class="col-md-6">
+                    <h2 class="text-uppercase">Confiança e Responsabilidade </h2>
+                    <p class="lead mb-small">
+                        Conheça os tipos de cimentos produzidos pelas industrias parceira e fique por dentro de alguns
+                        fatores importantes sobre a utilização de cada tipo do cimento
+                    </p>
+
+                    <p class="lead mb-small">
+                        Levamos muito a sério nossa logística com um visão focada na parceria e satisfação dos clientes.
+                        Distribuímos qualidade com serviço personalizado em carregamento e entrega de cimentos na
+                        Paraíba.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bar background-gray no-mb padding-big text-center-sm">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2 class="text-uppercase" style="color: #0c0c0c">Satisfação Garantida</h2>
+                    <p class="lead mb-small">
+                        Venda cimentos de qualidade por ótimos preços em seu estabelecimento comercial ou utilize em sua
+                        construção. Solicite agora mesmo uma visita de um de nossos vendedores
+                    </p>
+                </div>
+                <div class="col-md-6 text-center">
+                    <img src="{% static 'img/montesclaros.png' %}" alt="" class="img-responsive">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <section class=content">
+        <div class="dark-mask"></div>
+        <div class="container" id="contato">
+
+            <div class="row">
+                <div class="col-md-8">
+
+                    <section>
+
+                        <div class="heading">
+                            <h2 style="color:#0c0c0c">Contato</h2>
+                        </div>
+
+                        <p class="lead">Preparamos este espaço para você poder enviar sua mensagem. É importante para
+                            nós receber um feedback da sua parte.</p>
+                        <p></p>
+
+                        <form method="post" action="{% url 'submit_contact' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="firstname">Nome Completo</label>
+                                        <input type="text" class="form-control" id="firstname" name="name">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="text" class="form-control" id="email" name="email">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="subject">Assunto</label>
+                                        <input type="text" class="form-control" id="subject">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="message">Mensagem</label>
+                                        <textarea id="message" class="form-control" name="message"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 text-center">
+                                    <button type="submit" class="btn btn-template-main"><i class="fa fa-envelope-o"></i>
+                                        Enviar Mensagem
+                                    </button>
+
+                                </div>
+                            </div>
+                            <!-- /.row -->
+                        </form>
+
+                    </section>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <section>
+
+                        <h3 class="text-uppercase">Endereço</h3>
+
+                        <p><strong>Cia do Cimento.</strong>
+                            <br>R. Otacílio Nepomuceno, 1251, Galpão 02
+                            <br>Bairro Catolé, CEP: 58410-160
+                            <br>Paraiba, <strong>Brasil</strong>
+                            <br>
+                        </p>
+
+                        <h3 class="text-uppercase">Call Center</h3>
+
+                        <p class="text-muted">Utilize o número abaixo para entrar em contato conosco.</p>
+                        <p><strong>+55 (83) 3337 3757</strong>
+                        </p>
+
+
+                        <h3 class="text-uppercase">Suporte Eletrônico</h3>
+
+                        <p class="text-muted">Por favor, se tiver algum problema peço que nos envie a mensagem por email para o endereço abaixo.</p>
+                        <ul>
+                            <li><strong><a href="#">ciadocimento@gmail.com</a></strong>
+                            </li>
+                        </ul>
+
+                    </section>
+
+                </div>
+
+            </div>
+            <!-- /.row -->
+
+
+        </div>
+    </section>
+
+{% endblock %}
