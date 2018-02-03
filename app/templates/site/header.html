@@ -40,7 +40,7 @@
 
                     <div class="login">
                         {% if user.is_authenticated %}
-                            <a href="{% url 'notificacoes' %}"> Olá, {{ user.first_name }} &nbsp;&nbsp;&nbsp; </a>
+                            <a href="{% url 'login' %}"> Olá, {{ user.first_name }} &nbsp;&nbsp;&nbsp; </a>
                         {% else %}
                             <a href="{% url 'login' %}"><i class="fa fa-sign-in"></i>
                                 <span class="hidden-xs text-uppercase">Log in</span></a>
