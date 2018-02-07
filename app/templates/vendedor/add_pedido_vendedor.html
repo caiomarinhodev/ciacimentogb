@@ -154,12 +154,10 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            $(":input").inputmask();
             $('select').addClass('form-control');
             $('[name=data_entrega]').addClass('datepicker');
             $('input').addClass('form-control');
             $("input").attr('required', 'required');
-            $('#body').addClass('sidebar-collapse');
             $('#pedidos').addClass('active');
             $('#btn_cancelar').click(function () {
                 return window.history.back();
